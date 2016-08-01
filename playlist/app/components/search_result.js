@@ -54,7 +54,7 @@ class SearchResult extends React.Component {
 
 	render() {
 		let footer = null
-		const isLoading = this.props.isSearching || this.props.isViewingVideo
+		const isLoading = this.props.UI.isSearching || this.props.UI.isViewingVideo
 		if (isLoading) {
 			footer = (
 				<View style={styles.footer}>

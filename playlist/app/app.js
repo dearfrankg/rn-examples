@@ -66,23 +66,28 @@ const NavigationBarRouteMapper = {
 class App extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		let routes = []
-		if (this.refs.navigator) {
+		if (this.refs.navigator) { // if navigator is in the dom
 			routes = this.refs.navigator.getCurrentRoutes()
 		}
 
 		const hasVideoDetails = routes.length === 2
 		const hasPlaylists = routes.length === 3
 
-	  if (nextProps.playlist.isViewingListPlaylist && !nextProps.playlist.isViewingListPlaylistWithoutNavigator) {
+	  if (nextProps.playlist.isViewingListPlaylist &&
+			!nextProps.playlist.isViewingListPlaylistWithoutNavigator) {
+
 	  	if (hasPlaylists) return
-	  	this.refs.navigator.push({
+
+			this.refs.navigator.push({
 	  		id: 'playlists',
 	  		title: 'Playlists',
 	  		index: 2
 	  	})
 	  } else if (nextProps.search.viewedVideo) {
-	  	if (hasVideoDetails) return
-	  	this.refs.navigator.push({
+
+			if (hasVideoDetails) return
+
+			this.refs.navigator.push({
 	  		id: 'videoDetails',
 	  		title: nextProps.search.viewedVideo.snippet.title.substring(0, 20) + '...',
 	  		index: 1

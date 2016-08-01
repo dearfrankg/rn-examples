@@ -7,8 +7,8 @@ import {
   TouchableOpacity
 } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import SearchResult from './SearchResult'
-import VideoDetails from './VideoDetails'
+import SearchSceneResult from './SearchSceneResult'
+import SearchSceneVideo from './SearchSceneVideo'
 
 export default class SearchScene extends Component {
 
@@ -36,7 +36,7 @@ export default class SearchScene extends Component {
       case 'VideoDetails':
         return (
           <View style={styles.scene}>
-            <VideoDetails
+            <SearchSceneVideo
               {...this.props} />
           </View>
         )
@@ -44,7 +44,7 @@ export default class SearchScene extends Component {
       default:
         return (
           <View style={styles.scene}>
-            <SearchResult
+            <SearchSceneResult
               {...this.props} />
           </View>
         )

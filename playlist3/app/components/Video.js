@@ -9,10 +9,14 @@ import {
 } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
-export default class PlaylistVideo extends React.Component {
+export default class Video extends React.Component {
+
+  componentWillUnmount () {
+    this.props.actions.setPage()
+  }
 
   getVideoId() {
-    return this.props.playlist.selectedItem.id
+    return this.props.videoId
   }
 
   getPlayer() {
@@ -34,7 +38,7 @@ export default class PlaylistVideo extends React.Component {
 
   render() {
     const player = this.getPlayer()
-    const stats = this.props.playlist.selectedItem.statistics
+    const stats = this.props.stats
 
     return (
       <View style={styles.container}>
@@ -53,6 +57,7 @@ export default class PlaylistVideo extends React.Component {
             * <Text style={{fontWeight: 'bold'}}>{this.formatStat(stats.commentCount)}</Text> Comments
           </Text>
         </View>
+        {this.props.footer ? this.props.footer(this.props) : null}
       </View>
     )
   }
@@ -71,22 +76,5 @@ const styles = StyleSheet.create({
   },
   stats: {
     fontSize: 16
-  },
-  footer: {
-    padding: 15,
-    flexDirection: 'row',
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-    backgroundColor: '#ddd'
-  },
-  footerButtonText: {
-    color: '#333',
-    fontSize: 16,
-    fontWeight: 'bold'
-  },
-  icon: {
-    color: 'green',
-    width: 25,
-    height: 25,
   }
 })

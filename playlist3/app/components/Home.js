@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 
 export default class Home extends React.Component {
-  handleKeywordChange = (event) => {
+  handleSearchTermChange = (event) => {
     this.props.actions.setSearchTerm(event.nativeEvent.text.trim())
   }
 
@@ -66,7 +66,7 @@ export default class Home extends React.Component {
           : <TextInput
               style={styles.searchInput}
               value={this.props.search.searchTerm}
-              onChange={this.handleKeywordChange}
+              onChange={this.handleSearchTermChange}
               onSubmitEditing={this.handleSubmit}
               placeholder="Search for videos" />
         }

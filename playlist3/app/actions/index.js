@@ -20,7 +20,7 @@ const _getItemsStarted = () => ({type: types.GET_ITEMS_STARTED})
 const _getItemsSuccess = (items) => ({type: types.GET_ITEMS_SUCCESS, items})
 const _getItemsFailed = () => ({type: types.GET_ITEMS_FAILED})
 
-export const setSearchTerm = (searchTerm) => ({type: types.SET_SEARCH_TERM, searchTerm})
+export const setSearchTerm = (searchTerm = '') => ({type: types.SET_SEARCH_TERM, searchTerm})
 export const setScene = (scene) => ({type: types.SET_SCENE, scene})
 export const setPage = (page) => ({type: types.SET_PAGE, page})
 
@@ -44,6 +44,7 @@ export const search = (searchTerm, nextPageToken = null) => {
         if (!nextPageToken) {
           dispatch(_searchSuccess(data))
           dispatch(setScene('SearchScene'))
+          dispatch(setSearchTerm())
         } else {
           dispatch(_moreSearchSuccess(data))
         }

@@ -10,28 +10,19 @@ import {
   ActivityIndicator
 } from 'react-native'
 
-export default class SearchResult extends React.Component {
+export default class Playlist extends React.Component {
   constructor(props) {
     super(props);
     this.ds = new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2})
     this.state = {
-      dataSource: this.ds.cloneWithRows(this.props.search.result.items),
+      dataSource: this.ds.cloneWithRows(this.props.datasource),
     }
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      dataSource: this.ds.cloneWithRows(nextProps.search.result.items)
+      dataSource: this.ds.cloneWithRows(nextProps.datasource)
     })
-  }
-
-  handleRowPress = (rowData) => {
-    if (this.props.isViewingVideo) return
-    this.props.actions.videoFetch(rowData.id.videoId)
-  }
-
-  handleMore = () => {
-    this.props.actions.search(this.props.search.searchTerm, this.props.search.result.nextPageToken)
   }
 
   renderRow = (rowData) => {
@@ -39,7 +30,7 @@ export default class SearchResult extends React.Component {
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.rowButton}
-          onPress={() => this.handleRowPress(rowData)} >
+          onPress={() => this.props.handleRowPress(rowData)} >
           <View style={styles.rowWrapper}>
             <Image
               style={styles.thumbnail}
@@ -47,37 +38,6 @@ export default class SearchResult extends React.Component {
             <Text style={styles.title}>{rowData.snippet.title}</Text>
           </View>
         </TouchableOpacity>
-      </View>
-    )
-  }
-
-  renderSpinner = () => (
-    <View style={styles.footer}>
-      <ActivityIndicator
-        animating
-        color="#ffffff"
-        size="small"/>
-    </View>
-  )
-
-  renderShowMoreButton = () => (
-    <TouchableHighlight
-      style={styles.footer}
-      underlayColor="#991111"
-      onPress={this.handleMore}>
-      <Text style={styles.moreButtonText}>Show more</Text>
-    </TouchableHighlight>
-  )
-
-
-  renderFooter = () => {
-    const isLoading = this.props.UI.isLoading
-    return (
-      <View>
-        {isLoading
-          ? this.renderSpinner()
-          : this.renderShowMoreButton()
-        }
       </View>
     )
   }
@@ -91,7 +51,7 @@ export default class SearchResult extends React.Component {
           dataSource={this.state.dataSource}
           renderRow={this.renderRow} />
 
-        {this.renderFooter()}
+        {this.props.footer ? this.props.footer() : null}
       </View>
     )
   }
@@ -105,18 +65,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F1F1F1',
     padding: 10,
-  },
-  footer: {
-    padding: 15,
-    flexDirection: 'row',
-    backgroundColor: '#E62117',
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-  },
-  moreButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: 'bold'
   },
   row: {
     backgroundColor: '#ffffff',

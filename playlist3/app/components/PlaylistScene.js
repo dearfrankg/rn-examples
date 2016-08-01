@@ -7,8 +7,8 @@ import {
   TouchableOpacity
 } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import Playlist from './Playlist'
-import PlaylistVideo from './PlaylistVideo'
+import PlaylistSceneList from './PlaylistSceneList'
+import PlaylistSceneVideo from './PlaylistSceneVideo'
 
 export default class PlaylistScene extends Component {
 
@@ -36,7 +36,7 @@ export default class PlaylistScene extends Component {
       case 'VideoDetails':
         return (
           <View style={styles.scene}>
-            <PlaylistVideo
+            <PlaylistSceneVideo
               {...this.props} />
           </View>
         )
@@ -44,7 +44,7 @@ export default class PlaylistScene extends Component {
       default:
         return (
           <View style={styles.scene}>
-            <Playlist
+            <PlaylistSceneList
               {...this.props} />
           </View>
         )

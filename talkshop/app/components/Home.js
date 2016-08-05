@@ -13,6 +13,10 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 
 export default class Home extends React.Component {
 
+  componentWillMount () {
+    this.props.actions.fetchBeers()
+  }
+
   renderNavBar () {
     return (
       <View style={styles.navBar}>
@@ -30,12 +34,21 @@ export default class Home extends React.Component {
   }
 
   renderCard () {
+    const productIndex = this.props.UI.productIndex
+    const currProd = this.props.products.success.data[productIndex]
+    let uri
+    if ( 'labels' in currProd && 'medium' in currProd.labels ) {
+      uri = { uri: currProd.labels.medium }
+    } else {
+      uri = require('../images/Beer-icon.png')
+    }
+
     return (
       <View style={styles.card}>
         <Image
           style={styles.logo}
-          source={require('../images/youtube-logo.png')} />
-        <Text>This is the card text</Text>
+          source={uri} />
+        <Text>{currProd.nameDisplay}</Text>
       </View>
     )
   }
@@ -43,37 +56,58 @@ export default class Home extends React.Component {
   renderButtons () {
     return (
       <View style={styles.buttons}>
-        <View style={styles.passButton}>
+        <TouchableOpacity
+          style={styles.passButton}
+          onPress={this.props.actions.pass} >
           <Text style={styles.btnText} >Pass</Text>
-        </View>
+        </TouchableOpacity>
         {this.renderSpacer()}
-        <View style={styles.buyButton}>
+        <TouchableOpacity style={styles.buyButton}>
           <Text style={styles.btnText} >Buy</Text>
-        </View>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
+  renderContent () {
+    return (
+      <View style={styles.content}>
+        {this.renderSpacer()}
+        {this.renderCard()}
+        {this.renderButtons()}
+        {this.renderSpacer()}
+      </View>
+    )
+  }
+
+  renderSpinner () {
+    return (
+      <View style={styles.content}>
+        {this.renderSpacer()}
+        <ActivityIndicator
+          style={styles.preloader}
+          animating={true}
+          color="#111"
+          size="large"/>
+        {this.renderSpacer()}
       </View>
     )
   }
 
   render() {
+    const isLoading =  !('error' in this.props.products)
     return (
       <View style={styles.container}>
-
         {this.renderNavBar()}
-
-        <View style={styles.content}>
-          {this.renderSpacer()}
-          {this.renderCard()}
-          {this.renderButtons()}
-          {this.renderSpacer()}
-        </View>
-
+        { isLoading
+          ? this.renderSpinner()
+          : this.renderContent()
+        }
       </View>
     )
   }
 
 }
-
-// {/*{this.renderProduct()}*/}
 
 const styles = StyleSheet.create({
 
@@ -150,8 +184,8 @@ const styles = StyleSheet.create({
   logo: {
     width: 250,
     height: 150,
-    borderColor: 'red',
-    borderWidth: 1
+    borderColor: 'grey',
+    borderWidth: 0.5
   },
 
 })

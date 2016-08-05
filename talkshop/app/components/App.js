@@ -18,14 +18,14 @@ import Home from './Home'
 export default class App extends React.Component {
 
   renderPage() {
-    const { page } = this.props
+    const { page } = this.props.UI
     switch (page) {
       case 'shoppingCart':
-        return <ShoppingCart/>
+        return <ShoppingCart {...this.props} />
       case 'detail':
-        return <Detail/>
+        return <Detail {...this.props} />
       default:
-        return <Home/>
+        return <Home {...this.props} />
     }
   }
 
@@ -41,7 +41,8 @@ export default class App extends React.Component {
 
 export default connect(
   (state) => ({
-    page: state.UI.page
+    UI: state.UI,
+    products: state.products
   }),
   (dispatch) => ({
     actions: bindActionCreators(actions, dispatch)

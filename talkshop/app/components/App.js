@@ -31,7 +31,7 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <View>
+      <View style={{flex: 1}}>
        {this.renderPage()}
       </View>
     )

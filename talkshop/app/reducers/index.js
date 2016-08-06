@@ -5,7 +5,6 @@ const products = (state = {}, action) => {
   switch (action.type) {
 
     case types.FETCH_BEERS_SUCCESS:
-      console.log('products success')
       return {
         ...state,
         success: action.response,
@@ -35,19 +34,16 @@ const UI = (state = {}, action) => {
 
     case types.FETCH_BEERS_SUCCESS:
     case types.FETCH_BEERS_FAILURE:
-      console.log('fetch success')
       return {
         ...state,
         isLoading: false
       }
 
-    case types.PASS:
+    case types.SET_PRODUCT_INDEX:
       return {
         ...state,
-        productIndex: state.productIndex + 1
+        productIndex: action.index
       }
-
-
 
     default:
       return state

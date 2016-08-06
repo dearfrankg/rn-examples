@@ -24,7 +24,7 @@ const store = createStore(rootReducer, initialState, enhancer)
 
 const app = () => {
   return (
-    <Provider store={store}>
+    <Provider store={store} style={{flex: 1}}>
       <App />
     </Provider>
   )

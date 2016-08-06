@@ -10,11 +10,10 @@ import {
 } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
-
 export default class Home extends React.Component {
 
   componentWillMount () {
-    this.props.actions.fetchBeers()
+    this.props.actions.fetchBeers(this.props.products)
   }
 
   renderNavBar () {
@@ -34,14 +33,9 @@ export default class Home extends React.Component {
   }
 
   renderCard () {
-    const productIndex = this.props.UI.productIndex
+    const {productIndex} = this.props.UI
     const currProd = this.props.products.success.data[productIndex]
-    let uri
-    if ( 'labels' in currProd && 'medium' in currProd.labels ) {
-      uri = { uri: currProd.labels.medium }
-    } else {
-      uri = require('../images/Beer-icon.png')
-    }
+    const uri = { uri: currProd.labels.medium }
 
     return (
       <View style={styles.card}>
@@ -49,16 +43,20 @@ export default class Home extends React.Component {
           style={styles.logo}
           source={uri} />
         <Text>{currProd.nameDisplay}</Text>
+        <TouchableOpacity>
+          <Icon style={styles.navBarIcons} name='info-circle' size={15} />
+        </TouchableOpacity>
       </View>
     )
   }
 
   renderButtons () {
+    const {UI, products} = this.props
     return (
       <View style={styles.buttons}>
         <TouchableOpacity
           style={styles.passButton}
-          onPress={this.props.actions.pass} >
+          onPress={() => this.props.actions.pass(UI, products)} >
           <Text style={styles.btnText} >Pass</Text>
         </TouchableOpacity>
         {this.renderSpacer()}
@@ -95,7 +93,9 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const isLoading =  !('error' in this.props.products)
+    const isLoading = (
+      !('error' in this.props.products) || this.props.UI.isLoading
+    )
     return (
       <View style={styles.container}>
         {this.renderNavBar()}
@@ -114,7 +114,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    height: 520
   },
 
   content: {
@@ -125,6 +124,7 @@ const styles = StyleSheet.create({
 
   spacer: {
     flex: 1,
+    // backgroundColor: '#ff2'
   },
 
   navBar: {

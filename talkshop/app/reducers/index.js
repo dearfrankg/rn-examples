@@ -7,15 +7,23 @@ const products = (state = {}, action) => {
     case types.FETCH_BEERS_SUCCESS:
       return {
         ...state,
-        success: action.response,
+        ...action.response,
+        currentProduct: action.response.data[0],
+        productIndex: 0,
         error: 'none'
       }
 
     case types.FETCH_BEERS_FAILURE:
       return {
-        ...state,
-        products: {},
+        data: [],
         error: action.response
+      }
+
+    case types.SET_PRODUCT:
+      return {
+        ...state,
+        currentProduct: state.data[action.index],
+        productIndex: action.index
       }
 
     default:
@@ -39,11 +47,6 @@ const UI = (state = {}, action) => {
         isLoading: false
       }
 
-    case types.SET_PRODUCT_INDEX:
-      return {
-        ...state,
-        productIndex: action.index
-      }
 
     default:
       return state

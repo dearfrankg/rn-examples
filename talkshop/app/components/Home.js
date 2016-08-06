@@ -33,30 +33,35 @@ export default class Home extends React.Component {
   }
 
   renderCard () {
-    const {productIndex} = this.props.UI
-    const currProd = this.props.products.success.data[productIndex]
+    const {productIndex} = this.props.products
+    const currProd = this.props.products.data[productIndex]
     const uri = { uri: currProd.labels.medium }
 
     return (
       <View style={styles.card}>
+        {this.renderSpacer()}
         <Image
           style={styles.logo}
           source={uri} />
-        <Text>{currProd.nameDisplay}</Text>
-        <TouchableOpacity>
-          <Icon style={styles.navBarIcons} name='info-circle' size={15} />
-        </TouchableOpacity>
+        <Text style={styles.title}>{currProd.nameDisplay}</Text>
+        {this.renderSpacer()}
+        <View style={styles.info}>
+          {this.renderSpacer()}
+          <TouchableOpacity>
+            <Icon name='info-circle' size={15} />
+          </TouchableOpacity>
+        </View>
       </View>
     )
   }
 
   renderButtons () {
-    const {UI, products} = this.props
+    const {products} = this.props
     return (
       <View style={styles.buttons}>
         <TouchableOpacity
           style={styles.passButton}
-          onPress={() => this.props.actions.pass(UI, products)} >
+          onPress={() => this.props.actions.pass(products)} >
           <Text style={styles.btnText} >Pass</Text>
         </TouchableOpacity>
         {this.renderSpacer()}
@@ -108,6 +113,9 @@ export default class Home extends React.Component {
   }
 
 }
+
+
+
 
 const styles = StyleSheet.create({
 
@@ -187,5 +195,14 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     borderWidth: 0.5
   },
+
+  title: {
+    padding: 5,
+  },
+
+  info: {
+    flexDirection: 'row',
+    padding: 5,
+  }
 
 })

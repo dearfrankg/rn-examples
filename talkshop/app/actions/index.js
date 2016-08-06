@@ -2,16 +2,16 @@ import * as types from '../constants/actionTypes'
 import BreweryDB from '../services/BreweryDB'
 
 export const setPage = (page) => ({type: types.SET_PAGE, page})
-const setProductIndex = (index) => ({type: types.SET_PRODUCT_INDEX, index})
+const setProduct = (index) => ({type: types.SET_PRODUCT, index})
 
 export const fetchBeers = (products) => {
   return (dispatch) => {
 
     const pageNeeded = (function () {
       let page
-      const hasProductData = ('success' in products && 'data' in products.success)
+      const hasProductData = 'data' in products
       if (hasProductData) {
-        const {currentPage, numberOfPages} = products.success
+        const {currentPage, numberOfPages} = products
         const hasNoMorePages = (currentPage === numberOfPages)
         page = (hasNoMorePages) ? null : currentPage + 1
       } else {
@@ -26,7 +26,6 @@ export const fetchBeers = (products) => {
       .then((response) => response.json())
       .then(_filterPicsOnly)
       .then((res) => {
-        dispatch(setProductIndex(0))
         dispatch(_fetchBeersSuccess(res))
       })
       .catch((res) => {
@@ -44,15 +43,15 @@ const _filterPicsOnly = (res) => ({
 
 
 
-export const pass = (UI, products) => {
+export const pass = (products) => {
   return (dispatch) => {
-    const {productIndex} = UI
-    const beersLength = products.success.data.length
+    const {productIndex} = products
+    const beersLength = products.data.length
     const isRequiringFetch = (productIndex === beersLength - 1)
     if (isRequiringFetch) {
       dispatch(fetchBeers(products))
     } else {
-      dispatch(setProductIndex(productIndex + 1))
+      dispatch(setProduct(productIndex + 1))
     }
   }
 }

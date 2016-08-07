@@ -25,6 +25,7 @@ export default class App extends React.Component {
       case 'detail':
         return <Detail {...this.props} />
       default:
+        return <ShoppingCart {...this.props} />
         return <Home {...this.props} />
     }
   }

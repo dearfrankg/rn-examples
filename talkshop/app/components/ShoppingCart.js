@@ -16,12 +16,20 @@ export default class ShoppingCart extends React.Component {
     // this.props.actions.fetchBeers(this.props.products)
   }
 
+  handleBackButton = () => {
+    this.props.actions.setPage('')
+  }
+
   renderNavBar () {
     return (
       <View style={styles.navBar}>
-        <Text>{'       '}</Text>
+        <TouchableOpacity onPress={this.handleBackButton}>
+          <Icon style={styles.navBarLeftIcon} name='arrow-left' size={15} />
+          <Text>   Back</Text>
+        </TouchableOpacity>
+        {this.renderSpacer()}
         <Text>Shopping Cart</Text>
-        <Icon style={styles.navBarIcons} name='cog' size={15} />
+        {this.renderSpacer()}
       </View>
     )
   }
@@ -35,37 +43,29 @@ export default class ShoppingCart extends React.Component {
   }
 
   renderCart () {
+    const invoice = this.convertInvoiceStructure()
     return (
       <View style={styles.cart}>
-        <Text>Cart</Text>
-        <View style={styles.lineItems}>
-
-            <View style={{flexDirection: 'row'}}>
-              <Text>Fort Worth Beer</Text>
-              {this.renderSpacer()}
-              <Text>$111.00</Text>
-              <Text>$111.00</Text>
-            </View>
-
-
-          {/*{this.renderLineItem()}
-          {this.renderLineItem()}*/}
-        </View>
+        {invoice.lineItems.map((item, i) => (
+          this.renderLineItem(item, i)
+        ))}
         {this.renderSpacer()}
         <View style={styles.info}>
           {this.renderSpacer()}
-          <Text style={{fontWeight: 'bold'}}>Total: $500.00</Text>
+          <Text style={{fontWeight: 'bold'}}>Total: ${invoice.grandTotal}</Text>
         </View>
       </View>
     )
   }
 
-  renderLineItem () {
+  renderLineItem (item, i) {
     return (
-      <View style={styles.lineItem}>
-        <Text>Fort Worth Beer</Text>
+      <View style={styles.lineItem} key={i}>
+        <Text>{item.name}</Text>
         {this.renderSpacer()}
-        <Text>$100.00</Text>
+        <Text>{item.quantity}</Text>
+        {this.renderSpacer()}
+        <Text>{item.subtotal}</Text>
       </View>
     )
   }
@@ -93,6 +93,31 @@ export default class ShoppingCart extends React.Component {
     )
   }
 
+  convertInvoiceStructure = () => {
+    const items = this.props.invoice.items
+    const invoiceStructure = {}
+    items.forEach((item) => {
+      if (item.name in invoiceStructure) {
+        invoiceStructure[item.name][0]++
+      } else {
+        invoiceStructure[item.name] = [1, item.abv]
+      }
+    })
+    const lineItems = Object.keys(invoiceStructure).map((name) => {
+      return {
+        name,
+        quantity: invoiceStructure[name][0],
+        subtotal: (invoiceStructure[name][0] * invoiceStructure[name][1]).toFixed(2)
+      }
+    })
+    const grandTotal = lineItems.reduce((a, c) => a + parseFloat(c.subtotal), 0)
+    console.log(64, grandTotal)
+    return {
+      lineItems,
+      grandTotal: grandTotal.toFixed(2)
+    }
+  }
+
   render() {
     const isLoading = false
     return (
@@ -113,14 +138,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: 'pink'
   },
 
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f22',
   },
 
   spacer: {
@@ -129,29 +152,22 @@ const styles = StyleSheet.create({
   },
 
   cart: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'white',
-    // borderColor: 'black',
-    // borderRadius: 5,
-    // borderWidth: 0.2,
-    // width: 290,
-    // height: 290,
-    backgroundColor: '#22f'
-  },
-
-  lineItems: {
-    flexDirection: 'column',
-    backgroundColor: '#ff2'
+    backgroundColor: 'white',
+    borderColor: 'black',
+    borderRadius: 5,
+    borderWidth: 0.2,
+    width: 290,
+    height: 290,
   },
 
   lineItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 3,
-    padding: 0,
-    backgroundColor: '#f2f',
+    paddingLeft: 5,
+    paddingRight: 5
   },
 
   navBar: {
@@ -161,7 +177,11 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   },
 
-  navBarIcons: {
+  navBarLeftIcon: {
+    paddingLeft: 20
+  },
+
+  navBarRightIcon: {
     paddingRight: 20
   },
 

@@ -16,10 +16,26 @@ export default class Home extends React.Component {
     this.props.actions.fetchBeers(this.props.products)
   }
 
+  handleInfoButton = () => {
+    this.props.actions.setPage('detail')
+  }
+
+  handleCartButton = () => {
+    this.props.actions.setPage('shoppingCart')
+  }
+
+  handleBuyButton = () => {
+    this.props.actions.addItemToInvoice(this.props.products.currentProduct)
+  }
+
   renderNavBar () {
     return (
       <View style={styles.navBar}>
-        <Icon style={styles.navBarIcons} name='cog' size={15} />
+        <Icon
+          style={styles.navBarIcons}
+          name='shopping-cart'
+          size={15}
+          onPress={this.handleCartButton}/>
       </View>
     )
   }
@@ -36,7 +52,7 @@ export default class Home extends React.Component {
     const {productIndex} = this.props.products
     const currProd = this.props.products.data[productIndex]
     const uri = { uri: currProd.labels.medium }
-
+    const price = (parseFloat(currProd.abv) || 4.0).toFixed(2)
     return (
       <View style={styles.card}>
         {this.renderSpacer()}
@@ -44,10 +60,11 @@ export default class Home extends React.Component {
           style={styles.logo}
           source={uri} />
         <Text style={styles.title}>{currProd.nameDisplay}</Text>
+        <Text style={styles.title}>${price}</Text>
         {this.renderSpacer()}
         <View style={styles.info}>
           {this.renderSpacer()}
-          <TouchableOpacity>
+          <TouchableOpacity onPress={this.handleInfoButton}>
             <Icon name='info-circle' size={15} />
           </TouchableOpacity>
         </View>
@@ -65,7 +82,9 @@ export default class Home extends React.Component {
           <Text style={styles.btnText} >Pass</Text>
         </TouchableOpacity>
         {this.renderSpacer()}
-        <TouchableOpacity style={styles.buyButton}>
+        <TouchableOpacity
+          style={styles.buyButton}
+          onPress={this.handleBuyButton}>
           <Text style={styles.btnText} >Buy</Text>
         </TouchableOpacity>
       </View>

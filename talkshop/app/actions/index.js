@@ -2,6 +2,7 @@ import * as types from '../constants/actionTypes'
 import BreweryDB from '../services/BreweryDB'
 
 export const setPage = (page) => ({type: types.SET_PAGE, page})
+export const addItemToInvoice = (item) => ({type: types.ADD_ITEM_TO_INVOICE, item})
 const setProduct = (index) => ({type: types.SET_PRODUCT, index})
 
 export const fetchBeers = (products) => {
@@ -24,7 +25,7 @@ export const fetchBeers = (products) => {
     dispatch(_fetchBeersStart())
     BreweryDB.getBeers(pageNeeded)
       .then((response) => response.json())
-      .then(_filterPicsOnly)
+      .then(_filterValidProduct)
       .then((res) => {
         dispatch(_fetchBeersSuccess(res))
       })
@@ -36,9 +37,14 @@ export const fetchBeers = (products) => {
 const _fetchBeersStart = () => ({type: types.FETCH_BEERS_START})
 const _fetchBeersSuccess = (response) => ({type: types.FETCH_BEERS_SUCCESS, response})
 const _fetchBeersFailure = (response = 'none') => ({type: types.FETCH_BEERS_FAILURE, response})
-const _filterPicsOnly = (res) => ({
+const _filterValidProduct = (res) => ({
   ...res,
-  data: res.data.filter((beer) => 'labels' in beer && 'medium' in beer.labels)
+  data: res.data.filter((beer) => {
+    return (
+      'labels' in beer && 'medium' in beer.labels &&
+      beer.abv
+    )
+  })
 })
 
 

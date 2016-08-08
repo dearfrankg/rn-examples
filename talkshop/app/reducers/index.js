@@ -47,15 +47,39 @@ const UI = (state = {}, action) => {
         isLoading: false
       }
 
+    case types.SET_PAGE:
+      return {
+        ...state,
+        page: action.page
+      }
 
     default:
       return state
   }
 }
 
+const invoice = (state = {}, action) => {
+  switch (action.type) {
+    case types.ADD_ITEM_TO_INVOICE:
+      return {
+        ...state,
+        items: [
+          ...state.items,
+          action.item
+        ]
+      }
+
+    default:
+      return state
+  }
+}
+
+
+
 const rootReducer = combineReducers({
   products,
-  UI
+  UI,
+  invoice
 })
 
 export default rootReducer

@@ -25,7 +25,6 @@ export default class App extends React.Component {
       case 'detail':
         return <Detail {...this.props} />
       default:
-        return <ShoppingCart {...this.props} />
         return <Home {...this.props} />
     }
   }
@@ -43,7 +42,8 @@ export default class App extends React.Component {
 export default connect(
   (state) => ({
     UI: state.UI,
-    products: state.products
+    products: state.products,
+    invoice: state.invoice
   }),
   (dispatch) => ({
     actions: bindActionCreators(actions, dispatch)

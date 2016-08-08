@@ -3,6 +3,9 @@ const initialState = {
   },
   UI: {
     isLoading: false
+  },
+  invoice: {
+    items: []
   }
 }
 

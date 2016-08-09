@@ -8,7 +8,7 @@ reference: https://github.com/stripe/stripe-ios
     SETUP_ACCOUNT
 
         USER/PASS  
-        dearfrankg / time4Stripe
+        dearfrankg / abcd1234
 
     GET_API_KEY
 

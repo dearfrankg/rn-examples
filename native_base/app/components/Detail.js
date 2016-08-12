@@ -45,25 +45,6 @@ export default class Home extends React.Component {
     )
   }
 
-  renderButtons () {
-    const {products} = this.props
-    return (
-        <Grid style={{padding: 10}}>
-          <Col>
-            <Button info
-              onPress={this.handlePassButton}>Pass
-            </Button>
-          </Col>
-          <Col></Col>
-          <Col style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-            <Button success
-              onPress={this.handleBuyButton}>Buy
-            </Button>
-          </Col>
-        </Grid>
-    )
-  }
-
   renderHeader () {
     return (
       <Header>

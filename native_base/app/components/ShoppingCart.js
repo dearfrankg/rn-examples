@@ -98,10 +98,12 @@ export default class ShoppingCart extends React.Component {
 
   render() {
     return (
-      <View>
+      <Container>
         {this.renderHeader()}
-        {this.renderCart()}
-      </View>
+        <Content>
+          {this.renderCart()}
+        </Content>
+      </Container>
     )
   }
 

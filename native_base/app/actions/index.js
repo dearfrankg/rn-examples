@@ -1,6 +1,7 @@
 import * as types from '../constants/actionTypes'
 import BreweryDB from '../services/BreweryDB'
 
+export const setLoading = (isLoading) => ({type: types.SET_LOADING, isLoading})
 export const setPage = (page) => ({type: types.SET_PAGE, page})
 export const addItemToInvoice = (item) => ({type: types.ADD_ITEM_TO_INVOICE, item})
 const setProduct = (index) => ({type: types.SET_PRODUCT, index})
@@ -12,9 +13,9 @@ export const fetchBeers = (products) => {
       let page
       const hasProductData = 'data' in products
       if (hasProductData) {
-        const {currentPage, numberOfPages} = products
-        const hasNoMorePages = (currentPage === numberOfPages)
-        page = (hasNoMorePages) ? null : currentPage + 1
+        const hasViewedAllProducts = (products.productIndex === products.data.length -1)
+        const hasMorePages = (products.currentPage !== products.numberOfPages)
+        page = (hasViewedAllProducts && hasMorePages) ? products.currentPage + 1 : null
       } else {
         page = 1
       }

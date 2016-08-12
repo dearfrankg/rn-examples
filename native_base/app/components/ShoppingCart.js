@@ -1,99 +1,23 @@
 import React from 'react'
 import {
-  View,
-  Text,
-  TextInput,
   Image,
   StyleSheet,
-  ActivityIndicator,
   TouchableOpacity
 } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome'
+import {
+  Container, Content, Header, Button, Title, Icon, Spinner,
+  Card, CardItem, View, Text
+} from 'native-base';
+import { Col, Row, Grid } from "react-native-easy-grid"
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 export default class ShoppingCart extends React.Component {
-
-  componentWillMount () {
-    // this.props.actions.fetchBeers(this.props.products)
-  }
 
   handleBackButton = () => {
     this.props.actions.setPage('')
   }
 
-  renderNavBar () {
-    return (
-      <View style={styles.navBar}>
-        <TouchableOpacity onPress={this.handleBackButton}>
-          <Icon style={styles.navBarLeftIcon} name='arrow-left' size={15} />
-          <Text>   Back</Text>
-        </TouchableOpacity>
-        {this.renderSpacer()}
-        <Text>Shopping Cart</Text>
-        {this.renderSpacer()}
-      </View>
-    )
-  }
-
-  renderSpacer () {
-    return (
-      <View style={styles.spacer}>
-        {/*<Text>spacer</Text>*/}
-      </View>
-    )
-  }
-
-  renderCart () {
-    const invoice = this.convertInvoiceStructure()
-    return (
-      <View style={styles.cart}>
-        {invoice.lineItems.map((item, i) => (
-          this.renderLineItem(item, i)
-        ))}
-        {this.renderSpacer()}
-        <View style={styles.info}>
-          {this.renderSpacer()}
-          <Text style={{fontWeight: 'bold'}}>Total: ${invoice.grandTotal}</Text>
-        </View>
-      </View>
-    )
-  }
-
-  renderLineItem (item, i) {
-    return (
-      <View style={styles.lineItem} key={i}>
-        <Text>{item.name}</Text>
-        {this.renderSpacer()}
-        <Text>{item.quantity}</Text>
-        {this.renderSpacer()}
-        <Text>{item.subtotal}</Text>
-      </View>
-    )
-  }
-
-  renderContent () {
-    return (
-      <View style={styles.content}>
-        {this.renderCart()}
-        {this.renderSpacer()}
-      </View>
-    )
-  }
-
-  renderSpinner () {
-    return (
-      <View style={styles.content}>
-        {this.renderSpacer()}
-        <ActivityIndicator
-          style={styles.preloader}
-          animating={true}
-          color="#111"
-          size="large"/>
-        {this.renderSpacer()}
-      </View>
-    )
-  }
-
-  convertInvoiceStructure = () => {
+  getInvoiceData = () => {
     const items = this.props.invoice.items
     const invoiceStructure = {}
     items.forEach((item) => {
@@ -111,22 +35,72 @@ export default class ShoppingCart extends React.Component {
       }
     })
     const grandTotal = lineItems.reduce((a, c) => a + parseFloat(c.subtotal), 0)
-    console.log(64, grandTotal)
     return {
       lineItems,
       grandTotal: grandTotal.toFixed(2)
     }
   }
 
-  render() {
-    const isLoading = false
+  renderSpacer () {
     return (
-      <View style={styles.container}>
-        {this.renderNavBar()}
-        { isLoading
-          ? this.renderSpinner()
-          : this.renderContent()
-        }
+      <View style={styles.spacer}>
+        {/*<Text>spacer</Text>*/}
+      </View>
+    )
+  }
+
+  renderHeader () {
+    return (
+      <Header style={{}}>
+          <Button
+            onPress={this.handleBackButton}
+            transparent>
+            <FontAwesome name="arrow-left" size={20}/>
+          </Button>
+          <Title>Shopping Cart</Title>
+          <Button
+            transparent>
+            <Text> </Text>
+          </Button>
+      </Header>
+    )
+  }
+
+  renderLineItem (item, i) {
+    return (
+      <View style={styles.lineItem} key={i}>
+        <Text style={{flex: 6}} >{item.name}</Text>
+        <Text style={{flex: 1, textAlign: 'right'}} >{item.quantity}</Text>
+        <Text style={{flex: 2, textAlign: 'right'}} >${item.subtotal}</Text>
+      </View>
+    )
+  }
+
+
+  renderCart () {
+    const invoice = this.getInvoiceData()
+    return (
+      <View style={{flex: 1}}>
+        <View style={styles.cart}>
+          {invoice.lineItems.map((item, i) => (
+            this.renderLineItem(item, i)
+          ))}
+          {this.renderSpacer()}
+          <View style={styles.info}>
+            {this.renderSpacer()}
+            <Text style={{fontWeight: 'bold'}}>Total: ${invoice.grandTotal}</Text>
+          </View>
+        </View>
+        {this.renderSpacer()}
+      </View>
+    )
+  }
+
+  render() {
+    return (
+      <View>
+        {this.renderHeader()}
+        {this.renderCart()}
       </View>
     )
   }
@@ -152,14 +126,16 @@ const styles = StyleSheet.create({
   },
 
   cart: {
-    justifyContent: 'center',
+    margin: 10,
+    alignSelf: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: 'white',
     borderColor: 'black',
     borderRadius: 5,
     borderWidth: 0.2,
     width: 290,
-    height: 290,
+    minHeight: 290,
   },
 
   lineItem: {

@@ -2,7 +2,7 @@ const initialState = {
   products: {
   },
   UI: {
-    isLoading: false
+    isLoading: true
   },
   invoice: {
     items: []

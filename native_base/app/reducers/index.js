@@ -33,7 +33,6 @@ const products = (state = {}, action) => {
 
 const UI = (state = {}, action) => {
   switch (action.type) {
-
     case types.FETCH_BEERS_START:
       return {
         ...state,
@@ -41,7 +40,6 @@ const UI = (state = {}, action) => {
       }
 
     case types.FETCH_BEERS_SUCCESS:
-    case types.FETCH_BEERS_FAILURE:
       return {
         ...state,
         isLoading: false

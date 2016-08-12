@@ -1,184 +1,103 @@
 import React from 'react'
 import {
-  View,
-  Text,
-  TextInput,
-  Image,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity
+  Image, StyleSheet, TouchableOpacity
 } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome'
+import {
+  Container, Content, Header, Button, Title, Icon, Spinner,
+  Card, CardItem, View, Text
+} from 'native-base';
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { Col, Row, Grid } from "react-native-easy-grid"
 
-export default class Detail extends React.Component {
-
-  componentWillMount () {
-    this.props.actions.fetchBeers(this.props.products)
-  }
+export default class Home extends React.Component {
 
   handleBackButton = () => {
     this.props.actions.setPage('')
   }
 
-  renderNavBar () {
-    return (
-      <View style={styles.navBar}>
-        <TouchableOpacity onPress={this.handleBackButton}>
-          <Icon style={styles.navBarLeftIcon} name='arrow-left' size={15} />
-          <Text>   Back</Text>
-        </TouchableOpacity>
-        {this.renderSpacer()}
-        <Text>Detail          </Text>
-        {this.renderSpacer()}
-        <Icon style={styles.navBarRightIcon} name='cog' size={15} />
-      </View>
-    )
-  }
-
-  renderSpacer () {
-    return (
-      <View style={styles.spacer}>
-        {/*<Text>spacer</Text>*/}
-      </View>
-    )
-  }
-
-  renderCard () {
+  renderCardItem () {
     const {productIndex} = this.props.products
     const currProd = this.props.products.data[productIndex]
     const uri = { uri: currProd.labels.medium }
 
     return (
-      <View style={styles.card}>
-        {this.renderSpacer()}
-        <Image
-          style={styles.logo}
-          source={uri} />
-        <Text style={styles.title}>{currProd.nameDisplay}</Text>
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <TouchableOpacity
+          style={{marginLeft: 20, marginRight: 20, marginTop: 20}}
+          onPress={this.handleBackButton}>
+          <Image
+            style={styles.logo}
+            source={uri} />
+        </TouchableOpacity>
+        <Title style={{marginTop: 5}}>{currProd.nameDisplay}</Title>
         <Text style={styles.description}>{currProd.description}</Text>
-        {this.renderSpacer()}
       </View>
     )
   }
 
-  renderContent () {
+  renderCard () {
     return (
-      <View style={styles.content}>
-        {this.renderSpacer()}
-        {this.renderCard()}
-        {this.renderSpacer()}
+      <View style={{flex: 1}}>
+        <View style={styles.card}>
+          {this.renderCardItem()}
+        </View>
       </View>
     )
   }
 
-  renderSpinner () {
+  renderButtons () {
+    const {products} = this.props
     return (
-      <View style={styles.content}>
-        {this.renderSpacer()}
-        <ActivityIndicator
-          style={styles.preloader}
-          animating={true}
-          color="#111"
-          size="large"/>
-        {this.renderSpacer()}
-      </View>
+        <Grid style={{padding: 10}}>
+          <Col>
+            <Button info
+              onPress={this.handlePassButton}>Pass
+            </Button>
+          </Col>
+          <Col></Col>
+          <Col style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+            <Button success
+              onPress={this.handleBuyButton}>Buy
+            </Button>
+          </Col>
+        </Grid>
+    )
+  }
+
+  renderHeader () {
+    return (
+      <Header>
+          <Button
+            onPress={this.handleBackButton}
+            transparent>
+            <FontAwesome name="arrow-left" size={20}/>
+          </Button>
+          <Title>Detail</Title>
+          <Button transparent>
+            <Text> </Text>
+          </Button>
+      </Header>
     )
   }
 
   render() {
-    const isLoading = (
-      !('error' in this.props.products) || this.props.UI.isLoading
-    )
     return (
-      <View style={styles.container}>
-        {this.renderNavBar()}
-        { isLoading
-          ? this.renderSpinner()
-          : this.renderContent()
-        }
-      </View>
+      <Container>
+        {this.renderHeader()}
+        <Content contentContainerStyle={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          {this.renderCard()}
+        </Content>
+      </Container>
     )
   }
 
 }
 
-
-
-
 const styles = StyleSheet.create({
-
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
 
   spacer: {
     flex: 1,
     // backgroundColor: '#ff2'
-  },
-
-  navBar: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingTop: 30,
-    paddingBottom: 10
-  },
-
-  navBarRightIcon: {
-    paddingRight: 20
-  },
-
-  navBarLeftIcon: {
-    paddingLeft: 20
-  },
-
-  card: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    shadowColor: "black",
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    shadowOffset: {
-      height: 0,
-      width: 0
-    },
-    width: 290,
-    height: 290,
-  },
-
-  buttons: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 20,
-    width: 290,
-  },
-
-  btnText: {
-    color: '#fff'
-  },
-
-  passButton: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 5,
-    backgroundColor: '#f2f',
-    borderRadius: 5
-  },
-
-  buyButton: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 5,
-    backgroundColor: '#2f2',
-    borderRadius: 5
   },
 
   logo: {
@@ -188,19 +107,24 @@ const styles = StyleSheet.create({
     borderWidth: 0.5
   },
 
-  title: {
-    padding: 5,
-  },
-
   description: {
+    margin: 5,
     padding: 5,
     fontSize: 12,
     color: '#333'
   },
 
-  info: {
-    flexDirection: 'row',
-    padding: 5,
-  }
+  card: {
+    margin: 10,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderColor: 'black',
+    borderRadius: 5,
+    borderWidth: 0.2,
+    width: 290,
+    minHeight: 290,
+  },
 
 })

@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import * as types from '../constants/actionTypes'
+import {reducer as formReducer} from 'redux-form';
 
 const products = (state = {}, action) => {
   switch (action.type) {
@@ -73,11 +74,11 @@ const invoice = (state = {}, action) => {
 }
 
 
-
 const rootReducer = combineReducers({
   products,
   UI,
-  invoice
+  invoice,
+  form: formReducer
 })
 
 export default rootReducer

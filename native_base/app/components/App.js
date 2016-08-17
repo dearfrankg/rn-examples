@@ -14,6 +14,7 @@ import * as actions from '../actions'
 import ShoppingCart from './ShoppingCart'
 import Detail from './Detail'
 import Home from './Home'
+import Checkout from './Checkout'
 
 export default class App extends React.Component {
 
@@ -25,7 +26,7 @@ export default class App extends React.Component {
       case 'detail':
         return <Detail {...this.props} />
       default:
-        return <Home {...this.props} />
+        return <Checkout {...this.props} />
     }
   }
 

@@ -14,19 +14,21 @@ import * as actions from '../actions'
 import ShoppingCart from './ShoppingCart'
 import Detail from './Detail'
 import Home from './Home'
-import Checkout from './Checkout'
+import CardForm from './CardForm'
 
 export default class App extends React.Component {
 
   renderPage() {
     const { page } = this.props.UI
     switch (page) {
+      case 'cardForm':
+        return <CardForm {...this.props} />
       case 'shoppingCart':
         return <ShoppingCart {...this.props} />
       case 'detail':
         return <Detail {...this.props} />
       default:
-        return <Checkout {...this.props} />
+        return <Home {...this.props} />
     }
   }
 

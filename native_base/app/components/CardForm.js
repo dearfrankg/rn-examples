@@ -1,15 +1,16 @@
 import React, { Component, PropTypes } from 'react'
-import { reduxForm } from 'redux-form'
 import {
   Container, Content, List, ListItem, InputGroup, Input, Icon,
-  Text, Button, Header
+  Text, Button, Header, View
 } from 'native-base'
+import { reduxForm } from 'redux-form'
+
 export const fields = ['ccNumber', 'expMonth', 'expYear', 'cvc']
 
 class Checkout extends Component {
 
   handleSubmit = () => {
-    console.log(456, this.props.values)
+    this.props.actions.chargeCard({form: this.props.values, items: this.props.invoice.items})
   }
   render() {
     const {
@@ -51,7 +52,9 @@ class Checkout extends Component {
                     </InputGroup>
                 </ListItem>
             </List>
-           <Button onPress={this.handleSubmit}>Press Me</Button>
+            <View style={{flexDirection: 'row', justifyContent: 'flex-end', padding: 10}}>
+              <Button onPress={this.handleSubmit}>Purchase</Button>
+            </View>
         </Content>
       </Container>
     )

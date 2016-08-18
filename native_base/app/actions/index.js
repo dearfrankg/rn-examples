@@ -1,5 +1,7 @@
 import * as types from '../constants/actionTypes'
 import BreweryDB from '../services/BreweryDB'
+import Stripe from '../services/Stripe'
+import getInvoiceData from '../utils/InvoiceUtils'
 
 export const setLoading = (isLoading) => ({type: types.SET_LOADING, isLoading})
 export const setPage = (page) => ({type: types.SET_PAGE, page})
@@ -48,8 +50,6 @@ const _filterValidProduct = (res) => ({
   })
 })
 
-
-
 export const pass = (products) => {
   return (dispatch) => {
     const {productIndex} = products
@@ -62,3 +62,43 @@ export const pass = (products) => {
     }
   }
 }
+
+export const chargeCard = (chargeForm) => {
+  return (dispatch) => {
+
+    // HARDCODED FOR TESTING
+    // const form = chargeCard.form
+    const form = {
+      ccNumber: 4242424242424242,
+      expMonth: 10,
+      expYear: 2018,
+      cvc: 222
+    }
+
+
+
+    Stripe.createCardToken(form)
+      .then((response) => response.json())
+      .then((res) => {
+        const invoice = getInvoiceData(chargeForm.items)
+        const amount = parseInt(parseFloat(invoice.grandTotal) * 100, 10)
+        Stripe.chargeCard({token: res.id, amount})
+          .then((response) => response.json())
+          .then((res) => {
+            console.log('CHARGE_CARD_SUCCESS')
+            console.log(res)
+          })
+          .catch((res) => {
+            console.log('CHARGE_CARD_FAILURE')
+            console.log(res)
+          })
+      })
+      .catch((res) => {
+        console.log('CREATE_TOKEN_FAILURE')
+        console.log(res)
+      })
+  }
+}
+
+const _createTokenFailure = (response) => ({type: types.CREATE_TOKEN_FAILURE, response})
+const _chargeCardFailure = (response) => ({type: types.CHARGE_CARD_FAILURE, response})

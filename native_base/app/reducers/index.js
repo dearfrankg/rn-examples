@@ -73,11 +73,20 @@ const invoice = (state = {}, action) => {
   }
 }
 
+const stripe = (state = {}, action) => {
+  switch (action.type) {
+
+    default:
+      return state
+  }
+}
+
 
 const rootReducer = combineReducers({
   products,
   UI,
   invoice,
+  stripe,
   form: formReducer
 })
 

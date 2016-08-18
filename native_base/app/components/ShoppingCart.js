@@ -10,6 +10,7 @@ import {
 } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid"
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import getInvoiceData from '../utils/InvoiceUtils'
 
 export default class ShoppingCart extends React.Component {
 
@@ -17,28 +18,8 @@ export default class ShoppingCart extends React.Component {
     this.props.actions.setPage('')
   }
 
-  getInvoiceData = () => {
-    const items = this.props.invoice.items
-    const invoiceStructure = {}
-    items.forEach((item) => {
-      if (item.name in invoiceStructure) {
-        invoiceStructure[item.name][0]++
-      } else {
-        invoiceStructure[item.name] = [1, item.abv]
-      }
-    })
-    const lineItems = Object.keys(invoiceStructure).map((name) => {
-      return {
-        name,
-        quantity: invoiceStructure[name][0],
-        subtotal: (invoiceStructure[name][0] * invoiceStructure[name][1]).toFixed(2)
-      }
-    })
-    const grandTotal = lineItems.reduce((a, c) => a + parseFloat(c.subtotal), 0)
-    return {
-      lineItems,
-      grandTotal: grandTotal.toFixed(2)
-    }
+  handleBuyButton = () => {
+    this.props.actions.setPage('cardForm')
   }
 
   renderSpacer () {
@@ -78,7 +59,7 @@ export default class ShoppingCart extends React.Component {
 
 
   renderCart () {
-    const invoice = this.getInvoiceData()
+    const invoice = getInvoiceData(this.props.invoice.items)
     return (
       <View style={{flex: 1}}>
         <View style={styles.cart}>
@@ -91,6 +72,10 @@ export default class ShoppingCart extends React.Component {
             <Text style={{fontWeight: 'bold'}}>Total: ${invoice.grandTotal}</Text>
           </View>
         </View>
+        <View style={{flexDirection: 'row', justifyContent: 'flex-end', padding: 20}}>
+          <Button onPress={this.handleBuyButton}>Buy</Button>
+        </View>
+
         {this.renderSpacer()}
       </View>
     )

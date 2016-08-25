@@ -26,30 +26,30 @@ class Checkout extends Component {
             <List>
               <Text>CC Number</Text>
                 <ListItem>
-                    <InputGroup>
-                        <Input {...ccNumber} placeholder="xxxx-xxxx-xxxx-xxxx" />
-                    </InputGroup>
+                  <InputGroup>
+                      <Input {...ccNumber} placeholder="xxxx-xxxx-xxxx-xxxx" />
+                  </InputGroup>
                 </ListItem>
 
               <Text>Expiration Month</Text>
                 <ListItem>
-                    <InputGroup>
-                        <Input {...expMonth} placeholder="mm" />
-                    </InputGroup>
+                  <InputGroup>
+                      <Input {...expMonth} placeholder="mm" />
+                  </InputGroup>
                 </ListItem>
 
               <Text>Expiration Year</Text>
                 <ListItem>
-                    <InputGroup>
-                        <Input {...expYear} placeholder="yyyy" />
-                    </InputGroup>
+                  <InputGroup>
+                      <Input {...expYear} placeholder="yyyy" />
+                  </InputGroup>
                 </ListItem>
 
               <Text>CVC</Text>
                 <ListItem>
-                    <InputGroup>
-                        <Input {...cvc} placeholder="xxx" />
-                    </InputGroup>
+                  <InputGroup>
+                      <Input {...cvc} placeholder="xxx" />
+                  </InputGroup>
                 </ListItem>
             </List>
             <View style={{flexDirection: 'row', justifyContent: 'flex-end', padding: 10}}>
